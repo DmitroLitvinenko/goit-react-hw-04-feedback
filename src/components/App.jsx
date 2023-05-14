@@ -1,37 +1,43 @@
 import PropTypes from 'prop-types';
-import { Component } from 'react';
+import { useState } from 'react';
 import { Feedback } from './Feedback/Feedback';
 
-export class App extends Component {
-  static propTypes = {
-    good: PropTypes.number,
-    neutral: PropTypes.number,
-    bad: PropTypes.number,
-    onAddFeedback: PropTypes.func,
+export const App = () => {
+  const [good, setGood] = useState(0);
+  const [neutral, setNeutral] = useState(0);
+  const [bad, setBad] = useState(0);
+
+  const onAddFeedback = feedback => {
+    switch (feedback) {
+      case 'good':
+        setGood(prevGood => prevGood + 1);
+        break;
+      case 'neutral':
+        setNeutral(prevNeutral => prevNeutral + 1);
+        break;
+      case 'bad':
+        setBad(prevBad => prevBad + 1);
+        break;
+      default:
+        break;
+    }
   };
 
-  state = {
-    good: 0,
-    neutral: 0,
-    bad: 0,
-  };
+  return (
+    <>
+      <Feedback
+        good={good}
+        bad={bad}
+        neutral={neutral}
+        onAddFeedback={onAddFeedback}
+      />
+    </>
+  );
+};
 
-  onAddFeedback = feedback => {
-    this.setState(prevState => ({
-      [feedback]: prevState[feedback] + 1,
-    }));
-  };
-
-  render() {
-    return (
-      <>
-        <Feedback
-          good={this.state.good}
-          bad={this.state.bad}
-          neutral={this.state.neutral}
-          onAddFeedback={this.onAddFeedback}
-        />
-      </>
-    );
-  }
-}
+App.propTypes = {
+  good: PropTypes.number,
+  neutral: PropTypes.number,
+  bad: PropTypes.number,
+  onAddFeedback: PropTypes.func,
+};
